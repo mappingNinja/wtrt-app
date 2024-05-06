@@ -1,9 +1,30 @@
 import React, { useEffect, useState } from "react";
 import sampleJSONData from "../../sampleData/SampleData.json";
 
+const defaultAnswers = {
+  "0": "Yes",
+  "1": "Yes",
+  "2": "Yes",
+  "3": "Yes",
+  "4": "Yes",
+  "5": "Yes",
+  "6": "Yes",
+  "7": "Yes",
+  "8": "Yes",
+  "9": "Yes",
+  "10": "Yes",
+  "11": "Yes",
+  "12": "Yes",
+  "13": "Yes",
+  "14": "Yes",
+  "15": "Yes",
+  "16": "Yes"
+}
 const Questions = () => {
   const [questions, setQuestions] = useState([]);
   const [answerSelected, setAnswerSelected] = useState({});
+  const [isSaved, setIsSaved] = useState(false);
+  const [isValid, setIsvalid] = useState(true);
 
   const handleAnswerSelect = (questionIndex, answer) => {
     setAnswerSelected((prevState) => ({
@@ -19,13 +40,30 @@ const Questions = () => {
     }));
   };
 
+
+  const validateAnswers = () => {
+    let isValidate = true
+    questions.forEach((question, index) => {
+      if (question.validations.required && !answerSelected[index]) {
+        isValidate = false
+      }
+    })
+
+    return isValidate
+  }
+
   const handleAnswersSave = () => {
-    console.log("saved answers", answerSelected);
+    const isValid = validateAnswers();
+    if (!isValid) {
+      setIsvalid(false)
+    }
+    setIsSaved(true)
+
   };
+
 
   useEffect(() => {
     const extractedQuestions = sampleJSONData?.category[0]?.forms[0]?.questions;
-
     setQuestions(extractedQuestions);
   }, []);
 
@@ -53,12 +91,12 @@ const Questions = () => {
                     <div className="mt-3">
                       {question?.Options.map((option, optionIndex) => (
                         <button
+                          disabled={isSaved}
                           key={optionIndex}
-                          className={`btn ${
-                            answerSelected[index] === option.option
-                              ? "btn-success"
-                              : "btn-secondary"
-                          } me-2`}
+                          className={`btn ${answerSelected[index] === option.option
+                            ? "btn-success"
+                            : "btn-secondary"
+                            } me-2`}
                           onClick={() =>
                             handleAnswerSelect(index, option.option)
                           }
@@ -73,7 +111,6 @@ const Questions = () => {
                       </div>
                     ) : answerSelected[index] === "No" ? (
                       <div>
-                        {/* Display input field */}
                         <div className="mb-3">
                           <input
                             type="text"
@@ -91,7 +128,12 @@ const Questions = () => {
                     <hr />
                   </div>
                 ))}
-              <button className="btn btn-primary" onClick={handleAnswersSave}>
+
+              <div>
+                {!isValid ? (<div className="text-danger">*Please select all required field</div>) : null}
+              </div>
+
+              <button className="btn btn-primary" disabled={isSaved} onClick={handleAnswersSave}>
                 Save Answers
               </button>
             </div>
