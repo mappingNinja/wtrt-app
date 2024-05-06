@@ -4,39 +4,38 @@ import { useDispatch } from "react-redux";
 import { saveAnswersAction } from "../../redux/actions/answersAction";
 
 const defaultAnswers = {
-  "0": "Yes",
-  "1": "Yes",
-  "2": "Yes",
-  "3": "Yes",
-  "4": "Yes",
-  "5": "Yes",
-  "6": "Yes",
-  "7": "Yes",
-  "8": "Yes",
-  "9": "Yes",
-  "10": "Yes",
-  "11": "Yes",
-  "12": "Yes",
-  "13": "Yes",
-  "14": "Yes",
-  "15": "Yes",
-  "16": "Yes"
-}
+  0: "Yes",
+  1: "Yes",
+  2: "Yes",
+  3: "Yes",
+  4: "Yes",
+  5: "Yes",
+  6: "Yes",
+  7: "Yes",
+  8: "Yes",
+  9: "Yes",
+  10: "Yes",
+  11: "Yes",
+  12: "Yes",
+  13: "Yes",
+  14: "Yes",
+  15: "Yes",
+  16: "Yes",
+};
 const Questions = () => {
   const dispatch = useDispatch();
   const [questions, setQuestions] = useState([]);
   const [answerSelected, setAnswerSelected] = useState({});
-  const [isSaved, setIsSaved] = useState(false);
   const [isValid, setIsvalid] = useState(true);
 
-
   const setAnswers = () => {
-    dispatch(saveAnswersAction(answerSelected))
-  }
+    dispatch(saveAnswersAction(answerSelected));
+  };
 
   useEffect(() => {
-    setAnswers()
-  }, [])
+    setAnswers();
+  }, []);
+
   const handleAnswerSelect = (questionIndex, answer) => {
     setAnswerSelected((prevState) => ({
       ...prevState,
@@ -44,31 +43,23 @@ const Questions = () => {
     }));
   };
 
-  const handleCommentChange = (questionIndex, comment) => {
-    setAnswerSelected((prevState) => ({
-      ...prevState,
-      [questionIndex]: { ...prevState[questionIndex], comment }, // Update comment for the specific question
-    }));
-  };
-
   const validateAnswers = () => {
-    let isValidate = true
+    let isValidate = true;
     questions.forEach((question, index) => {
       if (question.validations.required && !answerSelected[index]) {
-        isValidate = false
+        isValidate = false;
       }
-    })
+    });
 
-    return isValidate
-  }
+    return isValidate;
+  };
 
   const handleAnswersSave = () => {
     const isValid = validateAnswers();
     if (!isValid) {
-      setIsvalid(false)
+      setIsvalid(false);
     }
 
-    setIsSaved(true)
     setAnswers();
   };
 
@@ -101,12 +92,12 @@ const Questions = () => {
                     <div className="mt-3">
                       {question?.Options.map((option, optionIndex) => (
                         <button
-                          disabled={isSaved}
                           key={optionIndex}
-                          className={`btn ${answerSelected[index] === option.option
-                            ? "btn-success"
-                            : "btn-secondary"
-                            } me-2`}
+                          className={`btn ${
+                            answerSelected[index] === option.option
+                              ? "btn-success"
+                              : "btn-secondary"
+                          } me-2`}
                           onClick={() =>
                             handleAnswerSelect(index, option.option)
                           }
@@ -127,10 +118,6 @@ const Questions = () => {
                             className="form-control mt-4"
                             id="commentBox"
                             placeholder="Comment Box"
-                            value={answerSelected[index]?.comment || ""}
-                            onChange={(e) =>
-                              handleCommentChange(index, e.target.value)
-                            }
                           />
                         </div>
                       </div>
@@ -140,10 +127,14 @@ const Questions = () => {
                 ))}
 
               <div>
-                {!isValid ? (<div className="text-danger">*Please select all required field</div>) : null}
+                {!isValid ? (
+                  <div className="text-danger">
+                    *Please select all required field
+                  </div>
+                ) : null}
               </div>
 
-              <button className="btn btn-primary" disabled={isSaved} onClick={handleAnswersSave}>
+              <button className="btn btn-primary" onClick={handleAnswersSave}>
                 Save Answers
               </button>
             </div>

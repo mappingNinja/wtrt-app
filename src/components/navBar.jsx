@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const NavBar = () => {
   return (
@@ -24,7 +25,9 @@ const NavBar = () => {
           </button>
         </div>
         <div className="float-right text-white" style={{ width: "12%" }}>
-          <button className="btn btn-secondary"> View Your Answers</button>
+          <Link to="/viewAnswers">
+            <button className="btn btn-secondary"> View Your Answers</button>
+          </Link>
         </div>
       </nav>
     </div>
