@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import sampleJSONData from "../../sampleData/SampleData.json";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const defaultAnswers = {
   0: "Yes",
@@ -22,13 +24,21 @@ const defaultAnswers = {
 };
 
 const ViewAnswers = () => {
+  const navigate = useNavigate();
   const [questions, setQuestions] = useState([]);
 
+  const answers = useSelector((state) => state.answers);
+
   useEffect(() => {
-    
     const extractedQuestions = sampleJSONData?.category[0]?.forms[0]?.questions;
     setQuestions(extractedQuestions);
   }, []);
+
+  useEffect(() => {
+    if (!Object.keys(answers || {}).length) {
+      navigate('/');
+    }
+  }, [answers])
 
   return (
     <div className="container-fluid" style={{ marginTop: "100px" }}>
@@ -46,25 +56,28 @@ const ViewAnswers = () => {
                 questions.map((question, index) => (
                   <div key={index}>
                     <div style={{ display: "flex", alignItems: "center" }}>
-                      <h5 className="card-title mt-3">{`${index}. ${question.title}`}</h5>
+                      <h5 className="card-title mt-3">{`${index + 1}. ${question.title}`}</h5>
                       {question?.validations?.required ? (
                         <span className="text-danger">&nbsp;*</span>
                       ) : null}
                     </div>
                     <div className="mt-3">
-                      {question?.Options.map((option, optionIndex) => (
-                        <button
-                          key={optionIndex}
-                          className={`btn ${
-                            defaultAnswers[index] === option.option
+                      {question?.Options.map((option, optionIndex) => {
+
+                        // console.log("🚀 ~ {question?.Options.map ~ option:", answers[index], option.option)
+                        return (
+                          <button
+                            key={optionIndex}
+                            className={`btn ${(answers || {})[index] === option.option
                               ? "btn-success"
                               : "btn-secondary"
-                          } me-2`}
-                          disabled
-                        >
-                          {option.option}
-                        </button>
-                      ))}
+                              } me-2`}
+                            disabled
+                          >
+                            {option.option}
+                          </button>
+                        )
+                      })}
                     </div>
 
                     <hr />

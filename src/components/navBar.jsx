@@ -9,9 +9,11 @@ const NavBar = () => {
         style={{ zIndex: 1 }}
       >
         <div className="container-fluid">
-          <h2 className="navbar-brand" style={{ color: "white" }}>
-            Way to React Technologies
-          </h2>
+          <Link to="/">
+            <h2 className="navbar-brand" style={{ color: "white" }}>
+              Way to React Technologies
+            </h2>
+          </Link>
           <button
             className="navbar-toggler"
             type="button"
@@ -23,11 +25,6 @@ const NavBar = () => {
           >
             <span className="navbar-toggler-icon"></span>
           </button>
-        </div>
-        <div className="float-right text-white" style={{ width: "12%" }}>
-          <Link to="/viewAnswers">
-            <button className="btn btn-secondary"> View Your Answers</button>
-          </Link>
         </div>
       </nav>
     </div>

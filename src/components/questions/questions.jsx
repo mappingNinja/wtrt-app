@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import sampleJSONData from "../../sampleData/SampleData.json";
 import { useDispatch } from "react-redux";
 import { saveAnswersAction } from "../../redux/actions/answersAction";
+import { useNavigate } from "react-router-dom";
 
 const defaultAnswers = {
   0: "Yes",
@@ -24,6 +25,7 @@ const defaultAnswers = {
 };
 const Questions = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [questions, setQuestions] = useState([]);
   const [answerSelected, setAnswerSelected] = useState({});
   const [isValid, setIsvalid] = useState(true);
@@ -61,6 +63,7 @@ const Questions = () => {
     }
 
     setAnswers();
+    navigate('/viewAnswers')
   };
 
   useEffect(() => {

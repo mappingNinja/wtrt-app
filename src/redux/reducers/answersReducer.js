@@ -2,7 +2,7 @@ import constants from "../constants";
 
 const { SAVE_ANSWERS } = constants;
 
-const initialState = { answers: {}, loading: false }
+const initialState = {}
 
 export const answersReducer = (state = initialState, action) => {
   const { type, answers } = action;
