@@ -61,10 +61,10 @@ const Questions = () => {
 
     if (!isValidAnswers) {
       setIsValid(false);
+    } else {
+      setAnswers();
+      navigate("/viewAnswers");
     }
-
-    setAnswers();
-    navigate("/viewAnswers");
   };
 
   useEffect(() => {

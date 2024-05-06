@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 
 const NavBar = () => {
   return (
@@ -9,11 +8,9 @@ const NavBar = () => {
         style={{ zIndex: 1 }}
       >
         <div className="container-fluid">
-          <Link to="/">
-            <h2 className="navbar-brand" style={{ color: "white" }}>
-              Way to React Technologies
-            </h2>
-          </Link>
+          <h2 className="navbar-brand" style={{ color: "white" }}>
+            Way to React Technologies
+          </h2>
           <button
             className="navbar-toggler"
             type="button"
