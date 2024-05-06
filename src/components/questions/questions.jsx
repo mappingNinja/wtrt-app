@@ -28,7 +28,7 @@ const Questions = () => {
   const navigate = useNavigate();
   const [questions, setQuestions] = useState([]);
   const [answerSelected, setAnswerSelected] = useState({});
-  const [isValid, setIsvalid] = useState(true);
+  const [isValid, setIsValid] = useState(true);
 
   const setAnswers = () => {
     dispatch(saveAnswersAction(answerSelected));
@@ -57,13 +57,14 @@ const Questions = () => {
   };
 
   const handleAnswersSave = () => {
-    const isValid = validateAnswers();
-    if (!isValid) {
-      setIsvalid(false);
+    const isValidAnswers = validateAnswers();
+
+    if (!isValidAnswers) {
+      setIsValid(false);
     }
 
     setAnswers();
-    navigate('/viewAnswers')
+    navigate("/viewAnswers");
   };
 
   useEffect(() => {
@@ -85,9 +86,11 @@ const Questions = () => {
               </span>
               {questions &&
                 questions.map((question, index) => (
-                  <div key={index}>
+                  <div key={index + 1}>
                     <div style={{ display: "flex", alignItems: "center" }}>
-                      <h5 className="card-title mt-3">{`${index}. ${question.title}`}</h5>
+                      <h5 className="card-title mt-3">{`${index + 1}. ${
+                        question.title
+                      }`}</h5>
                       {question?.validations?.required ? (
                         <span className="text-danger">&nbsp;*</span>
                       ) : null}
@@ -109,22 +112,26 @@ const Questions = () => {
                         </button>
                       ))}
                     </div>
-                    {answerSelected[index] === "Yes" ? (
-                      <div className="mt-4">
-                        <i class="fa fa-camera"></i>
-                      </div>
-                    ) : answerSelected[index] === "No" ? (
-                      <div>
-                        <div className="mb-3">
-                          <input
-                            type="text"
-                            className="form-control mt-4"
-                            id="commentBox"
-                            placeholder="Comment Box"
-                          />
-                        </div>
-                      </div>
-                    ) : null}
+                    {question?.rules.map((rule, ruleIndex) => {
+                      return answerSelected[index] === rule.rule ? (
+                        rule.action === "Image" ? (
+                          <div key={ruleIndex} className="mt-4">
+                            <i className="fa fa-camera"></i>
+                          </div>
+                        ) : rule.action === "Comment" ? (
+                          <div key={ruleIndex}>
+                            <div className="mb-3">
+                              <input
+                                type="text"
+                                className="form-control mt-4"
+                                id="commentBox"
+                                placeholder="Comment Box"
+                              />
+                            </div>
+                          </div>
+                        ) : null
+                      ) : null;
+                    })}
                     <hr />
                   </div>
                 ))}
