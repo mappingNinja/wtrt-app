@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import sampleJSONData from "../../sampleData/SampleData.json";
+import { useDispatch } from "react-redux";
+import { saveAnswersAction } from "../../redux/actions/answersAction";
 
 const defaultAnswers = {
   "0": "Yes",
@@ -21,11 +23,20 @@ const defaultAnswers = {
   "16": "Yes"
 }
 const Questions = () => {
+  const dispatch = useDispatch();
   const [questions, setQuestions] = useState([]);
   const [answerSelected, setAnswerSelected] = useState({});
   const [isSaved, setIsSaved] = useState(false);
   const [isValid, setIsvalid] = useState(true);
 
+
+  const setAnswers = () => {
+    dispatch(saveAnswersAction(answerSelected))
+  }
+
+  useEffect(() => {
+    setAnswers()
+  }, [])
   const handleAnswerSelect = (questionIndex, answer) => {
     setAnswerSelected((prevState) => ({
       ...prevState,
@@ -39,7 +50,6 @@ const Questions = () => {
       [questionIndex]: { ...prevState[questionIndex], comment }, // Update comment for the specific question
     }));
   };
-
 
   const validateAnswers = () => {
     let isValidate = true
@@ -57,10 +67,10 @@ const Questions = () => {
     if (!isValid) {
       setIsvalid(false)
     }
+
     setIsSaved(true)
-
+    setAnswers();
   };
-
 
   useEffect(() => {
     const extractedQuestions = sampleJSONData?.category[0]?.forms[0]?.questions;
